@@ -1,0 +1,9 @@
+---
+
+- name: Copy gitconfig
+  template:
+    src: gitconfig.j2
+    dest: /home/vagrant/.gitconfig
+    owner: vagrant
+    group: vagrant
+  tags: [development]

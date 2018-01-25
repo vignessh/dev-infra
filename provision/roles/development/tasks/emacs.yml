@@ -1,0 +1,78 @@
+---
+
+- name: Install supporting packages to compile Emacs
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - gcc
+    - make
+    - ncurses-devel
+    - giflib-devel
+    - libjpeg-devel
+    - libtiff-devel
+  tags: [emacs]
+
+- name: Check if emacs is already present
+  stat:
+    path: /usr/local/bin/emacs
+  register: emacs_present
+  tags: [emacs]
+
+- name: Download latest Emacs package
+  get_url:
+    url: http://ftp.gnu.org/gnu/emacs/emacs-25.3.tar.gz
+    dest: /home/vagrant/emacs-25.3.tar.gz
+    owner: vagrant
+    group: vagrant
+  when: emacs_present.stat.exists == False
+  tags: [emacs]
+
+- name: Extract the package
+  unarchive:
+    src: /home/vagrant/emacs-25.3.tar.gz
+    dest: /home/vagrant/
+    remote_src: yes
+    group: vagrant
+    owner: vagrant
+  become_user: vagrant
+  when: emacs_present.stat.exists == False
+  tags: [emacs]
+
+- name: Configure and make the package
+  shell: |
+    ./configure --without-x --without-selinux
+
+    make
+
+    sudo make install
+  args:
+    chdir: ~/emacs-25.3
+  become_user: vagrant
+  when: emacs_present.stat.exists == False
+  tags: [emacs]
+
+- name: Copy init.el for Emacs initialization
+  copy:
+    src: init.el
+    dest: /home/vagrant/.emacs.d/init.el
+    owner: vagrant
+    group: vagrant
+  tags: [emacs]
+
+- name: Create site-lisp folder if it doesn't exist
+  file:
+    path: /home/vagrant/.emacs.d/site-lisp
+    state: directory
+    mode: "u=rwx,o=r,g=r"
+    owner: vagrant
+    group: vagrant
+  tags: [emacs]
+
+- name: Copy duplicate line macro
+  copy:
+    src: duplicate-line.el
+    dest: /home/vagrant/.emacs.d/site-lisp/duplicate-line.el
+    owner: vagrant
+    group: vagrant
+  tags: [emacs]

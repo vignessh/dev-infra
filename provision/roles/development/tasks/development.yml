@@ -1,0 +1,17 @@
+---
+
+- name: Install required dependencies
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - java-1.8.0-openjdk-devel
+    - git2u
+    - byobu
+  tags: [development]
+
+- name: Upgrade all installed Packages
+  yum:
+    name: '*'
+    state: latest
+  tags: [development]

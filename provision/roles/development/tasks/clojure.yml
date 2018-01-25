@@ -1,0 +1,24 @@
+---
+
+- name: Download latest Leiningen
+  get_url:
+    url: https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+    dest: /usr/local/bin/lein
+    mode: "a+x"
+  tags: [clojure]
+
+- name: Create .lein folder if it doesn't exist
+  file:
+    path: /home/vagrant/.lein
+    state: directory
+    owner: vagrant
+    group: vagrant
+  tags: [clojure]
+
+- name: Copy profiles.clj
+  copy:
+    src: profiles.clj
+    dest: /home/vagrant/.lein/profiles.clj
+    owner: vagrant
+    group: vagrant
+  tags: [clojure]

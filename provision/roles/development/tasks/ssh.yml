@@ -1,0 +1,50 @@
+---
+
+- name: Copy known hosts
+  copy:
+    src: known_hosts
+    dest: /home/vagrant/.ssh/known_hosts
+    owner: vagrant
+    group: vagrant
+    mode: "u=rw,g=r,o=r"
+  tags: [development]
+
+- name: Copy SSH config
+  copy:
+    src: config
+    dest: /home/vagrant/.ssh/config
+    owner: vagrant
+    group: vagrant
+    mode: "u=rw,g=r,o=r"
+  tags: [development]
+
+- name: Setup authorized keys
+  authorized_key:
+    user: vagrant
+    key: "{{public_key}}"
+    state: present
+  tags: [development]
+
+- name: Copy public key
+  copy:
+    content: "{{public_key}}"
+    dest: /home/vagrant/.ssh/id_rsa.pub
+    owner: vagrant
+    group: vagrant
+    mode: "u=rw,g=r,o=r"
+  tags: [development]
+
+- name: Copy sudoers
+  copy:
+    src: root_ssh_agent.sudoers
+    dest: /etc/sudoers.d/root_ssh_agent.sudoers
+    owner: root
+    group: root
+    mode: "u=rw,g=r,o=r"
+  tags: [development]
+
+- name: Restart ssh
+  service:
+    name: sshd
+    state: restarted
+  tags: [development]

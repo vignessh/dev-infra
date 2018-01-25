@@ -1,0 +1,5 @@
+- include_tasks: ssh.yml
+- include_tasks: emacs.yml
+- include_tasks: development.yml
+- include_tasks: clojure.yml
+- include_tasks: code.yml

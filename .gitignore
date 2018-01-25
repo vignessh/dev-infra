@@ -1,0 +1,4 @@
+config.yml
+.vagrant
+*.retry
+.DS_Store
