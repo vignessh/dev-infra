@@ -29,7 +29,7 @@ This will pull down the box from Vagrant Atlas and prepare it for initial use. T
 
 Once the control comes back to you, you can then say ```vagrant ssh```. You are now ready to go !
 
-### Regular usage ###
+## Regular usage
 Open up a terminal window and navigate to where you have checked out this code ```vagrant up```.
 
 This will launch the VM and give the control back to you.
