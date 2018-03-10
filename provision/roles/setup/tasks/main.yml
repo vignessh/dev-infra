@@ -24,4 +24,6 @@
     - wget
     - telnet
     - ntp
+    - htop
+    - tig
   tags: [setup]

@@ -4,7 +4,9 @@ A way to get a Clojure development environment based on Vagrant.
 
 ### What do you get ###
 * Fully configured Emacs editor
-* All dependencies already installed
+* Following dependencies have been installed:
+  * [OpenJDK 8](http://openjdk.java.net/install/)
+  * [Leiningen 2.7.1](https://github.com/technomancy/leiningen/releases/tag/2.7.1)
 
 ## Getting started
 
@@ -30,7 +32,7 @@ This will pull down the box from Vagrant Atlas and prepare it for initial use. T
 Once the control comes back to you, you can then say ```vagrant ssh```. You are now ready to go !
 
 ## Regular usage
-Open up a terminal window and navigate to where you have checked out this code ```vagrant up```.
+Open up a terminal window and navigate to where you have checked out this code and say ```vagrant up```.
 
 This will launch the VM and give the control back to you.
 

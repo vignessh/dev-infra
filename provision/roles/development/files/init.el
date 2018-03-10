@@ -36,6 +36,7 @@ and a list of packages and create an associated list:
                       starter-kit-eshell
                       clojure-mode
                       cider
+											helm
                       sass-mode
                       yaml-mode
 											rainbow-delimiters
@@ -51,13 +52,30 @@ and a list of packages and create an associated list:
     (package-install p)))
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
-;; (add-hook 'clojure-mode-hook #'smartparens-strict-mode)
 
 (global-company-mode)
 (global-auto-revert-mode 1)
 
 (load-theme 'zenburn t)
+
+;; Cljr customizations
+(require 'clj-refactor)
+
+(defun cljr-mode ()
+    (clj-refactor-mode 1)
+    (yas-minor-mode 1))
+
+;; Clojure mode customizations
+(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'clojure-mode-hook #'subword-mode)
+(add-hook 'clojure-mode-hook #'smartparens-mode)
+(add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+(add-hook 'clojure-mode-hook #'cljr-mode)
+
+;; activate helm mode
+(require 'helm-config)
+(helm-mode 1)
 
 ;; Disable the Emacs menu bar
 (menu-bar-mode -1)
@@ -69,6 +87,9 @@ and a list of packages and create an associated list:
 (global-set-key (kbd "M-t") 'textmate-goto-file)
 (global-set-key (kbd "M-T") 'textmate-goto-symbol)
 
+;; Magit keybindings
+(global-set-key (kbd "C-c g") 'magit-status)
+(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
 ;; Turn off ido flex complete if the complete list is
 ;; exceed 2000. Emacs will freeze up otherwise.

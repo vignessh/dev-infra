@@ -10,6 +10,11 @@
     - byobu
   tags: [development]
 
+- name: Allow Byobu to start by default
+  shell: byobu-enable
+  become_user: vagrant
+  tags: [development]
+
 - name: Upgrade all installed Packages
   yum:
     name: '*'
