@@ -3,10 +3,20 @@
 A way to get a Clojure development environment based on Vagrant.
 
 ### What do you get ###
-* Fully configured Emacs editor
-* Following dependencies have been installed:
+* Fully configured Emacs editor with the following packages
+  * [helm](https://github.com/emacs-helm)
+  * [cljr-refactor](https://github.com/clojure-emacs/clj-refactor.el)
+  * [cider](https://github.com/clojure-emacs/cider)
+  * [smartparens](https://github.com/Fuco1/smartparens)
+  * [clojure-mode](https://github.com/clojure-emacs/clojure-mode)
+  * [rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters)
+* Along with the following software dependencies
   * [OpenJDK 8](http://openjdk.java.net/install/)
   * [Leiningen 2.7.1](https://github.com/technomancy/leiningen/releases/tag/2.7.1)
+  * [cider-nrepl](https://github.com/clojure-emacs/cider-nrepl)
+  * [lein-ancient](https://github.com/xsc/lein-ancient)
+  * [jonase/eastwood](https://github.com/jonase/eastwood)
+  * [com.jakemccrary/lein-test-refresh](https://github.com/jakemcc/lein-test-refresh)
 
 ## Getting started
 
