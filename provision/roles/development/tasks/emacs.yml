@@ -52,6 +52,15 @@
   when: emacs_present.stat.exists == False
   tags: [emacs]
 
+- name: Create .emacs.d folder if it doesn't exist
+  file:
+    path: /home/vagrant/.emacs.d
+    state: directory
+    mode: "u=rwx,o=r,g=r"
+    owner: vagrant
+    group: vagrant
+  tags: [emacs]
+
 - name: Copy init.el for Emacs initialization
   copy:
     src: init.el
