@@ -2,11 +2,11 @@
 
 - name: Create .ssh folder
   file:
-    path: /home/vagrant/.ssh/
+    path: /home/vagrant/.ssh
     state: directory
-    mode: "u=rw,o=r,g=r"
     owner: vagrant
     group: vagrant
+    mode: "u=rwx,g=r,o=r"
   tags: [development]
 
 - name: Copy known hosts

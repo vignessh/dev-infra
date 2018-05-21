@@ -2,7 +2,7 @@
 
 - name: Download latest Leiningen
   get_url:
-    url: https://raw.githubusercontent.com/technomancy/leiningen/2.7.1/bin/lein
+    url: https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
     dest: /usr/local/bin/lein
     mode: "a+x"
   tags: [clojure]

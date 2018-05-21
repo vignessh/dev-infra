@@ -1,23 +1,23 @@
-- name: Add Extended Packages for Enterprise Linux repository
-  yum:
-    name: epel-release
-    state: present
+- name: Add required PPA
+  apt_repository:
+    repo: "{{ item }}"
+  with_items:
+    - ppa:git-core/ppa
+    - ppa:openjdk-r/ppa
+    - ppa:kelleyk/emacs
+  when: ansible_os_family == "Debian"
   tags: [setup]
 
-- name: Add IUS repository
-  yum:
-    name: https://centos7.iuscommunity.org/ius-release.rpm
-    state: present
-  tags: [setup]
-
-- name: Add REMI repository
-  yum:
-    name: http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
-    state: present
+- name: Install Aptitude
+  apt:
+    pkg: "aptitude"
+    state: latest
+    update_cache: yes
+  when: ansible_os_family == "Debian"
   tags: [setup]
 
 - name: Install useful command line tools
-  yum:
+  package:
     name: "{{item}}"
     state: present
   with_items:
@@ -27,4 +27,10 @@
     - htop
     - unzip
     - tig
+  tags: [setup]
+
+- name: Setup timezone to be local
+  become: yes
+  command: timedatectl set-timezone Asia/Kolkata
+  when: ansible_os_family == "Debian"
   tags: [setup]

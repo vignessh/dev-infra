@@ -30,9 +30,15 @@ and a list of packages and create an associated list:
 (defvar my-packages '(color-theme
                       textmate
                       expand-region
+											paredit
                       clojure-mode
+											clojure-mode-extra-font-locking
                       cider
+											clj-refactor
 											helm
+											smex
+											projectile
+											crux
                       sass-mode
                       yaml-mode
 											rainbow-delimiters

@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "centos/7"
+  config.vm.box = "ubuntu/xenial64"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -74,7 +74,6 @@ Vagrant.configure("2") do |config|
     vb.memory = "2048"
     vb.cpus = 2
     vb.name = "devbox"
-    override.vm.box_url = "https://cloud.centos.org/centos/7/vagrant/x86_64/images/CentOS-7-x86_64-Vagrant-1804_02.VirtualBox.box"
   end
 
   # View the documentation for the provider you are using for more

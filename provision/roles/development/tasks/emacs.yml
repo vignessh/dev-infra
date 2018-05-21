@@ -1,55 +1,60 @@
 ---
 
-- name: Install supporting packages to compile Emacs
-  yum:
-    name: "{{ item }}"
+# - name: Install supporting packages to compile Emacs
+#   package:
+#     name: "{{ item }}"
+#     state: present
+#   with_items:
+#     - gcc
+#     - make
+#     - libncurses5-dev
+#     - libgif-dev
+#     - libtiff-dev
+#   tags: [emacs]
+#
+# - name: Check if emacs is already present
+#   stat:
+#     path: /usr/local/bin/emacs
+#   register: emacs_present
+#   tags: [emacs]
+#
+# - name: Download latest Emacs package
+#   get_url:
+#     url: http://ftp.gnu.org/gnu/emacs/emacs-25.3.tar.gz
+#     dest: /home/vagrant/emacs-25.3.tar.gz
+#     owner: vagrant
+#     group: vagrant
+#   when: emacs_present.stat.exists == False
+#   tags: [emacs]
+#
+# - name: Extract the package
+#   unarchive:
+#     src: /home/vagrant/emacs-25.3.tar.gz
+#     dest: /home/vagrant/
+#     remote_src: yes
+#     group: vagrant
+#     owner: vagrant
+#   become_user: vagrant
+#   when: emacs_present.stat.exists == False
+#   tags: [emacs]
+#
+# - name: Configure and make the package
+#   shell: |
+#     ./configure --without-x --without-selinux
+#
+#     make
+#
+#     sudo make install
+#   args:
+#     chdir: ~/emacs-25.3
+#   become_user: vagrant
+#   when: emacs_present.stat.exists == False
+#   tags: [emacs]
+
+- name: Install emacs from package
+  package:
+    name: emacs25
     state: present
-  with_items:
-    - gcc
-    - make
-    - ncurses-devel
-    - giflib-devel
-    - libjpeg-devel
-    - libtiff-devel
-  tags: [emacs]
-
-- name: Check if emacs is already present
-  stat:
-    path: /usr/local/bin/emacs
-  register: emacs_present
-  tags: [emacs]
-
-- name: Download latest Emacs package
-  get_url:
-    url: http://ftp.gnu.org/gnu/emacs/emacs-25.3.tar.gz
-    dest: /home/vagrant/emacs-25.3.tar.gz
-    owner: vagrant
-    group: vagrant
-  when: emacs_present.stat.exists == False
-  tags: [emacs]
-
-- name: Extract the package
-  unarchive:
-    src: /home/vagrant/emacs-25.3.tar.gz
-    dest: /home/vagrant/
-    remote_src: yes
-    group: vagrant
-    owner: vagrant
-  become_user: vagrant
-  when: emacs_present.stat.exists == False
-  tags: [emacs]
-
-- name: Configure and make the package
-  shell: |
-    ./configure --without-x --without-selinux
-
-    make
-
-    sudo make install
-  args:
-    chdir: ~/emacs-25.3
-  become_user: vagrant
-  when: emacs_present.stat.exists == False
   tags: [emacs]
 
 - name: Create .emacs.d folder if it doesn't exist
