@@ -1,0 +1,17 @@
+---
+
+- name: Add required PPA
+  apt_repository:
+    repo: "{{ item }}"
+  with_items:
+    - ppa:git-core/ppa
+    - ppa:openjdk-r/ppa
+    - ppa:kelleyk/emacs
+  tags: [setup]
+
+- name: Install Aptitude
+  apt:
+    pkg: "aptitude"
+    state: latest
+    update_cache: yes
+  tags: [setup]

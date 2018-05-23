@@ -1,20 +1,5 @@
-- name: Add required PPA
-  apt_repository:
-    repo: "{{ item }}"
-  with_items:
-    - ppa:git-core/ppa
-    - ppa:openjdk-r/ppa
-    - ppa:kelleyk/emacs
-  when: ansible_os_family == "Debian"
-  tags: [setup]
-
-- name: Install Aptitude
-  apt:
-    pkg: "aptitude"
-    state: latest
-    update_cache: yes
-  when: ansible_os_family == "Debian"
-  tags: [setup]
+- include_tasks: repo.yml
+- include_tasks: zsh.yml
 
 - name: Install useful command line tools
   package:

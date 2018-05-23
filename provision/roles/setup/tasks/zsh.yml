@@ -1,0 +1,33 @@
+---
+- name: Install useful command line tools
+  package:
+    name: zsh
+    state: present
+  tags: [setup]
+
+- name: Cloning repo
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh
+    dest: /home/vagrant/.oh-my-zsh
+  tags: [setup]
+
+- name: Set permissions
+  file:
+    path: /home/vagrant/.oh-my-zsh
+    state: directory
+    recurse: yes
+    owner: vagrant
+    group: vagrant
+  tags: [setup]
+
+- name: Creating new ~/.zshrc
+  template:
+    src: zshrc.j2
+    dest: /home/vagrant/.zshrc
+  tags: [setup]
+
+- name: Ensure user is using zsh shell
+  user:
+    name: vagrant
+    shell: /bin/zsh
+  tags: [setup]
