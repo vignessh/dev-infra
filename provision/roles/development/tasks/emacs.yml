@@ -1,69 +1,70 @@
 ---
 
-# - name: Install supporting packages to compile Emacs
-#   package:
-#     name: "{{ item }}"
-#     state: present
-#   with_items:
-#     - gcc
-#     - make
-#     - libncurses5-dev
-#     - libgif-dev
-#     - libtiff-dev
-#   tags: [emacs]
-#
-# - name: Check if emacs is already present
-#   stat:
-#     path: /usr/local/bin/emacs
-#   register: emacs_present
-#   tags: [emacs]
-#
-# - name: Download latest Emacs package
-#   get_url:
-#     url: http://ftp.gnu.org/gnu/emacs/emacs-25.3.tar.gz
-#     dest: /home/vagrant/emacs-25.3.tar.gz
-#     owner: vagrant
-#     group: vagrant
-#   when: emacs_present.stat.exists == False
-#   tags: [emacs]
-#
-# - name: Extract the package
-#   unarchive:
-#     src: /home/vagrant/emacs-25.3.tar.gz
-#     dest: /home/vagrant/
-#     remote_src: yes
-#     group: vagrant
-#     owner: vagrant
-#   become_user: vagrant
-#   when: emacs_present.stat.exists == False
-#   tags: [emacs]
-#
-# - name: Configure and make the package
-#   shell: |
-#     ./configure --without-x --without-selinux
-#
-#     make
-#
-#     sudo make install
-#   args:
-#     chdir: ~/emacs-25.3
-#   become_user: vagrant
-#   when: emacs_present.stat.exists == False
-#   tags: [emacs]
+- name: Include required variables
+  include_vars: "../vars/default.yml"
+  tags: [emacs]
 
-- name: Install emacs from package
-  package:
-    name: emacs25
+- name: Install supporting packages to compile Emacs
+  yum:
+    name: ['gcc', 'make', 'gnutls-devel', 'ncurses-devel', 'giflib-devel', 'libjpeg-devel', 'libtiff-devel']
     state: present
   tags: [emacs]
 
-- name: Create .emacs.d folder if it doesn't exist
+- name: Download latest Emacs package
+  get_url:
+    url: http://ftp.gnu.org/gnu/emacs/{{ emacs_version }}.tar.gz
+    dest: /home/vagrant/{{ emacs_version }}.tar.gz
+    owner: vagrant
+    group: vagrant
+  when: emacs_present.stat.exists == False
+  tags: [emacs]
+
+- name: Extract the package
+  unarchive:
+    src: /home/vagrant/{{ emacs_version }}.tar.gz
+    dest: /home/vagrant/
+    remote_src: yes
+    group: vagrant
+    owner: vagrant
+  become_user: vagrant
+  when: emacs_present.stat.exists == False
+  tags: [emacs]
+
+- name: Configure and make the package
+  shell: |
+    ./configure --with-mailutils --without-x --without-selinux
+
+    make
+
+    sudo make install
+  args:
+    chdir: ~/{{ emacs_version }}
+  become_user: vagrant
+  when: emacs_present.stat.exists == False
+  tags: [emacs]
+
+- name: Create .emacs.d folder if not present
   file:
     path: /home/vagrant/.emacs.d
     state: directory
-    mode: "u=rwx,o=r,g=r"
     owner: vagrant
     group: vagrant
+    mode: "u=rwx,o=r,g=r"
+  tags: [emacs]
+
+- name: Downloading Emacs Prelude
+  get_url:
+    url: https://raw.githubusercontent.com/bbatsov/prelude/master/utils/installer.sh
+    dest: /tmp/
+    mode: 0755
+  become: yes
+  tags: [emacs]
+
+- name: Install Prelude
+  shell: /tmp/installer.sh
+  args:
+    chdir: /tmp/
+    executable: /bin/sh
   tags: [emacs]
 
 - name: Copy init.el for Emacs initialization

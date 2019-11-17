@@ -2,16 +2,9 @@
 - include_tasks: zsh.yml
 
 - name: Install useful command line tools
-  package:
-    name: "{{item}}"
+  yum:
+    name: ['wget', 'telnet', 'ntp', 'htop', 'unzip', 'tig', 'ngrep']
     state: present
-  with_items:
-    - wget
-    - telnet
-    - ntp
-    - htop
-    - unzip
-    - tig
   tags: [setup]
 
 - name: Setup timezone to be local
