@@ -4,43 +4,57 @@
   include_vars: "../vars/default.yml"
   tags: [emacs]
 
-- name: Install supporting packages to compile Emacs
-  yum:
-    name: ['gcc', 'make', 'gnutls-devel', 'ncurses-devel', 'giflib-devel', 'libjpeg-devel', 'libtiff-devel']
-    state: present
+# - name: Install supporting packages to compile Emacs
+#   yum:
+#     name: ['gcc', 'make', 'gnutls-devel', 'ncurses-devel', 'giflib-devel', 'libjpeg-devel', 'libtiff-devel']
+#     state: present
+#   tags: [emacs]
+#
+# - name: Download latest Emacs package
+#   get_url:
+#     url: http://ftp.gnu.org/gnu/emacs/{{ emacs_version }}.tar.gz
+#     dest: /home/vagrant/{{ emacs_version }}.tar.gz
+#     owner: vagrant
+#     group: vagrant
+#   when: emacs_present.stat.exists == False
+#   tags: [emacs]
+#
+# - name: Extract the package
+#   unarchive:
+#     src: /home/vagrant/{{ emacs_version }}.tar.gz
+#     dest: /home/vagrant/
+#     remote_src: yes
+#     group: vagrant
+#     owner: vagrant
+#   become_user: vagrant
+#   when: emacs_present.stat.exists == False
+#   tags: [emacs]
+#
+# - name: Configure and make the package
+#   shell: |
+#     ./configure --with-mailutils --without-x --without-selinux
+#
+#     make
+#
+#     sudo make install
+#   args:
+#     chdir: ~/{{ emacs_version }}
+#   become_user: vagrant
+#   when: emacs_present.stat.exists == False
+#   tags: [emacs]
+
+- name: Install emacs
+  dnf:
+    name: emacs-nox
+    state: latest
+  when: ansible_os_family == "Redhat"
   tags: [emacs]
 
-- name: Download latest Emacs package
-  get_url:
-    url: http://ftp.gnu.org/gnu/emacs/{{ emacs_version }}.tar.gz
-    dest: /home/vagrant/{{ emacs_version }}.tar.gz
-    owner: vagrant
-    group: vagrant
-  when: emacs_present.stat.exists == False
-  tags: [emacs]
-
-- name: Extract the package
-  unarchive:
-    src: /home/vagrant/{{ emacs_version }}.tar.gz
-    dest: /home/vagrant/
-    remote_src: yes
-    group: vagrant
-    owner: vagrant
-  become_user: vagrant
-  when: emacs_present.stat.exists == False
-  tags: [emacs]
-
-- name: Configure and make the package
-  shell: |
-    ./configure --with-mailutils --without-x --without-selinux
-
-    make
-
-    sudo make install
-  args:
-    chdir: ~/{{ emacs_version }}
-  become_user: vagrant
-  when: emacs_present.stat.exists == False
+- name: Install emacs
+  apt:
+    name: emacs26-nox
+    state: latest
+  when: ansible_os_family == "Debian"
   tags: [emacs]
 
 - name: Create .emacs.d folder if not present
@@ -65,12 +79,29 @@
   args:
     chdir: /tmp/
     executable: /bin/sh
+  become: vagrant
   tags: [emacs]
 
-- name: Copy init.el for Emacs initialization
+- name: Configure prelude modules to be loaded by default
   copy:
-    src: init.el
-    dest: /home/vagrant/.emacs.d/init.el
+    src: prelude-modules.el
+    dest: /home/vagrant/.emacs.d/personal/prelude-modules.el
+    owner: vagrant
+    group: vagrant
+  tags: [emacs]
+
+- name: Require custom packages
+  copy:
+    src: require-packages.el
+    dest: /home/vagrant/.emacs.d/personal/require-packages.el
+    owner: vagrant
+    group: vagrant
+  tags: [emacs]
+
+- name: Set default theme
+  copy:
+    src: set-theme.el
+    dest: /home/vagrant/.emacs.d/personal/preload/set-theme.el
     owner: vagrant
     group: vagrant
   tags: [emacs]

@@ -1,5 +1,12 @@
 ---
 
+- name: Add Extended Packages for Enterprise Linux repository
+  dnf:
+    name: epel-release
+    state: present
+  when: ansible_os_family == "RedHat"
+  tags: [setup]
+
 - name: Add required PPA
   apt_repository:
     repo: "{{ item }}"
@@ -7,6 +14,7 @@
     - ppa:git-core/ppa
     - ppa:openjdk-r/ppa
     - ppa:kelleyk/emacs
+  when: ansible_os_family == "Debian"
   tags: [setup]
 
 - name: Install Aptitude
@@ -14,4 +22,5 @@
     pkg: "aptitude"
     state: latest
     update_cache: yes
+  when: ansible_os_family == "Debian"
   tags: [setup]

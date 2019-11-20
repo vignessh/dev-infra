@@ -1,13 +1,29 @@
 ---
 
 - name: Install required dependencies
-  yum:
-    name: ['java-latest-openjdk-devel', 'byobu']
+  dnf:
+    name: ['openjdk-latest-jdk', 'byobu']
     state: present
+  when: ansible_os_family == "Redhat"
+  tags: [development]
+
+- name: Install required dependencies
+  apt:
+    name: ['openjdk-13-jdk', 'byobu']
+    state: present
+  when: ansible_os_family == "Debian"
   tags: [development]
 
 - name: Upgrade all installed Packages
   apt:
     update_cache: yes
     upgrade: yes
+  when: ansible_os_family == "Debian"
+  tags: [development]
+
+- name: Upgrade all installed Packages
+  dnf:
+    update_cache: yes
+    upgrade: yes
+  when: ansible_os_family == "Redhat"
   tags: [development]

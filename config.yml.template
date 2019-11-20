@@ -1,4 +1,4 @@
-name: <your display name>
-email: <your email address>
+user_name: <your display name>
+user_email: <your email address>
 public_key_path: <path to your public key>
 private_key_path: <path to your private key>
